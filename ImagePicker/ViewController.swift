@@ -9,6 +9,7 @@
 import UIKit
 import BSImagePicker
 import Photos
+import SVProgressHUD
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -18,10 +19,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     let importButton : UIButton = {
        let button = UIButton()
-        button.setTitle("Import Images", for: .normal)
+        button.setTitle("IMPORT IMAGES", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.backgroundColor = .black
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleImportTap), for: .touchUpInside)
+        button.layer.cornerRadius = 10
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 5, height: 5)
+        button.layer.shadowRadius = 5
+        button.layer.shadowOpacity = 1
         return button
     }()
     
@@ -30,18 +37,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         layout.scrollDirection = .horizontal
        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.backgroundColor = .white
+        cv.layer.cornerRadius = 10
+        cv.layer.shadowColor = UIColor.black.cgColor
+        cv.layer.shadowOffset = CGSize(width: 5, height: 5)
+        cv.layer.shadowRadius = 5
+        cv.layer.shadowOpacity = 1
         return cv
     }()
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        view.backgroundColor = .red
+        view.backgroundColor = .white
+        imageArray = [UIImage(named: "image-1")] as! [UIImage]
         collectionView.register(ImagesCell.self, forCellWithReuseIdentifier: cellId)
         view.addSubview(collectionView)
         collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 8).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -8).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: view.frame.height / 2.5).isActive = true
         
         collectionView.delegate = self
@@ -50,7 +65,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.addSubview(importButton)
         importButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         importButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        importButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        importButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40).isActive = true
         importButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
         
@@ -73,7 +88,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             // User cancelled. And this where the assets currently selected.
         }, finish: { (assets: [PHAsset]) -> Void in
             // User finished with these assets
+            
             for i in 0..<assets.count {
+                self.imageArray = [UIImage]()
                 self.selectedAssets.append(assets[i])
             }
             self.convertAssetToImages()
@@ -82,7 +99,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func convertAssetToImages() -> Void{
-        
+        SVProgressHUD.show()
         for i in 0..<selectedAssets.count {
             let manager = PHImageManager.default()
             let option = PHImageRequestOptions()
@@ -96,8 +113,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let data = thumbnail.jpegData(compressionQuality: 0.7)
             let newImage = UIImage(data: data!)
             self.imageArray.append(newImage! as UIImage)
-            collectionView.reloadData()
+
+            DispatchQueue.main.async {
+                 self.collectionView.reloadData()
+            }
+           
+           
+          
         }
+        
+         SVProgressHUD.dismiss()
         
     }
     

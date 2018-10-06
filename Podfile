@@ -8,5 +8,6 @@ target 'ImagePicker' do
   # Pods for ImagePicker
 
   pod "BSImagePicker", "~> 2.8"
+  pod 'SVProgressHUD'
 
 end

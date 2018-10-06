@@ -4,21 +4,25 @@ PODS:
     - BSGridCollectionViewLayout (= 1.2.2)
     - BSImageView (= 1.0.2)
   - BSImageView (1.0.2)
+  - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
   - BSImagePicker (~> 2.8)
+  - SVProgressHUD
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - BSGridCollectionViewLayout
     - BSImagePicker
     - BSImageView
+    - SVProgressHUD
 
 SPEC CHECKSUMS:
   BSGridCollectionViewLayout: 3e6f23b3a2b4f0ca9afae09ca01389d1057f7b32
   BSImagePicker: 553707de1adaad42eac252e0b84d20dbdba83fe9
   BSImageView: ab22ff8cae61f1ae17a3c9efeeb216af3cf84a09
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: f8c8aff04f79323155fd127744f396edf74b6927
+PODFILE CHECKSUM: 6f0f4a950e2c8492b8766fd6a950d481f94b43f0
 
 COCOAPODS: 1.5.3
